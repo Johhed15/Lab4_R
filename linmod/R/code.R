@@ -19,7 +19,7 @@
 #' 
 #' @export
 #' 
-#' @source <https://en.wikipedia.org/wiki/Ordinary_least_squares>
+#' @source \url{https://en.wikipedia.org/wiki/Ordinary_least_squares}
 
 linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame',
                                               Y = 'numeric',X = 'matrix',
