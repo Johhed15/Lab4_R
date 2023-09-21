@@ -1,0 +1,4 @@
+export("linreg")
+exportClasses(
+    "linreg" 
+)
