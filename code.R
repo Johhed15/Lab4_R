@@ -1,58 +1,10 @@
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-
-
-linreg <- function(formula, data){
-  # cheking the input
-  stopifnot(length(all.vars(formula)) > 1,
-            is.data.frame(data))
-  # Picking out the Y variable and creating the X-matrix
-  Y <- data[,all.vars(formula)[1]]
-  X <- model.matrix(formula, data)
-  
-  # calculating the coefficients
-  beta_hat <- solve(t(X)%*%X) %*% t(X) %*% Y
-  
-  # Estimating Y_hat
-  y_hat <- X %*% beta_hat
-  
-  # The residuals
-  e <- y-y_hat
-  
-  # Degrees of freedom
-  df <- nrow(X) - ncol(X)
-  
-  # Residual variance 
-  sigma_2 <- (t(e) %*% e) / df
-  
-  # Variance of beta_hat
-  VAR_B <- sigma_2[1] * solve((t(X) %*% X))
-  
-  # T-values for the beta coefficients
-  t_b <- beta_hat/(sqrt(diag(VAR_B)))
-  
-  # The p-values for the coefficients
-  p_values <-  pt(t_b, df=df,lower.tail = FALSE)
-  
-}
-
-
-
 linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame',
                                               Y = 'numeric',X = 'matrix',
                                               beta_hat='matrix', y_hat='array',
                                               e='array', df='numeric',
                                               sigma_2='matrix',VAR_B='matrix',
-                                              t_b='array', p_values='array'),
+                                              t_b='array', p_values='array',
+                                              df_name='character'),
                       methods = list(
                         initialize = function(formula, data){
                           
@@ -60,7 +12,7 @@ linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame
                           .self$formula <- formula
                           # cheking the input
                          stopifnot(length(all.vars(formula)) >= 1,
-                                   is.data.frame(data))
+                         is.data.frame(data),all.vars(formula) %in% colnames(data))
                           # Picking out the Y variable and creating the X-matrix
                           .self$Y <- data[,all.vars(formula)[1]]
                           .self$X <- model.matrix(formula, data)
@@ -89,62 +41,93 @@ linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame
                           # The p-values for the coefficients
                           .self$p_values <- 1 - pt(.self$t_b, df=.self$df)
                           
+                          # taking ot the name of the dataframe
+                          .self$df_name <-  deparse(substitute(data))
                         },
                         plot = function() {
-                          print(ggplot2::ggplot(data.frame(.self$y_hat,"Residuals"=.self$e),ggplot2::aes(x=y_hat,y=Residuals)) + 
-                            ggplot2::geom_point(size=4, fill='white', shape=21) +
-                            ggplot2::stat_summary(fun=median, geom='line', color='red') +
-                            ggplot2::theme_bw() + ggplot2::xlab(paste0('Fitted Values \n',formula))+
-                            ggplot2::ggtitle('Residual vs Fitted values')+
-                            ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)))
+                          # creating a dataframe to create plots
+                          res_fit_df <- data.frame(y_hat, e)
+                          res_fit_df$std_res <- as.numeric(abs(scale(res_fit_df$e)))
                           
-                         print(ggplot2::ggplot(data.frame(.self$y_hat,"Residuals"=abs(scale(.self$e))),ggplot2::aes(x=y_hat,y=Residuals)) + 
-                            ggplot2::geom_point(size=4, fill='white', shape=21) +
-                            ggplot2::stat_summary(fun=median, geom='line', color='red') +
-                            ggplot2::theme_bw() + ggplot2::xlab(paste0('Fitted Values \n',formula))+
-                             ggplot2::ylab('Standardized Residuals')+
-                            ggplot2::ggtitle('Scale-Location')+
-                            ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)))
+                          
+                          # Picking out the quantiles to calculate outliers
+                          res_q <- quantile(res_fit_df$e, probs = c(0.25,0.75))
+                          res_q_std <- quantile(res_fit_df$std_res, probs = c(0.25,0.75))
+                          
+                          # calculating the outliers
+                          outliers <- res_fit_df[which(e < res_q[1]-1.6*(res_q[2]-res_q[1]) | e > res_q[2]+1.6*(res_q[2]-res_q[1])),]
+                          outliers_std <- res_fit_df[which(res_fit_df$std_res < res_q_std[1]-1.6*(res_q_std[2]-res_q_std[1]) | res_fit_df$std_res > res_q_std[2]+1.6*(res_q_std[2]-res_q_std[1])),]
+                         
+                          # The first graph of the residuals vs fitted values
+                          base::print( ggplot2::ggplot(data = res_fit_df, ggplot2::aes(x = y_hat, y = e)) +
+                            # Making it a scatterplot with white points
+                            ggplot2::geom_point(size = 4, fill = "white", shape = 21) + ggplot2::theme_bw() + 
+                            
+                            ggplot2::labs(y = "Residuals", x = paste0("Fitted values \n",deparse(formula)), title = "Residuals vs Fitted") +
+                            ggplot2::geom_hline(yintercept = 0, color = "gray", linetype = "dotted") + 
+                            # A red line which shows a loess curve
+                            ggplot2::stat_smooth(method = "loess", color = "red", se = FALSE, span = 1) +
+                            # Changing the theme and labs to make the graph visually better
+                            ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(),
+                                  panel.background = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
+                                  text = ggplot2::element_text(size = 12), plot.title = ggplot2::element_text(size = 16, hjust = 0.5)) +
+                            ggplot2::geom_text(data = res_fit_df[rownames(outliers),], 
+                                      ggplot2::aes(label = rownames(outliers), vjust = 0, hjust = 1.3), check_overlap = TRUE) + 
+                            ggplot2::scale_y_continuous(limits = c(-1.5, 1.5), breaks = c(-1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5)))
+                          
+                          
+                          
+                          # creating a ggplot2 diagram of the standardized absolute 
+                          # squared root residuals 
+                          
+                          ggplot2::ggplot(data = res_fit_df, ggplot2::aes(x = y_hat, y = sqrt(std_res))) + 
+                            # Making it a scatterplot with white points
+                            ggplot2::geom_point(size = 4, fill = "white", shape = 21) + ggplot2::theme_bw() + 
+                            # Using expression to make a title with square root sign
+                            ggplot2::labs(y = expression(sqrt("|Standardized residuals|")), x = paste0("Fitted values \n",deparse(formula)), title = "Scale-Location") +
+                            # A red line which shows a loess curve
+                            ggplot2::geom_smooth(method = "loess", color = "red", se = FALSE, span = 1) +
+                            # Changing the theme and labs to make the graph visually better
+                            ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(),
+                                  panel.background = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
+                                  text = ggplot2::element_text(size = 12), plot.title = ggplot2::element_text(hjust = 0.5, size = 16)) +
+                            
+                            ggplot2::geom_text(data = res_fit_df[rownames(outliers_std),], 
+                            ggplot2::aes(label = rownames(outliers_std), vjust = 0, hjust = 1.3), check_overlap = TRUE) + 
+                            ggplot2::scale_y_continuous(limits = c(0, 1.8), breaks = c(0, 0.5, 1.0, 1.5))
                         },
-                        summary = function() {
-                          cat('Call \n', formula, 'data=',data,'\n')
-                      
-                          cat('Coefficients:')
+                        print = function() {
+                          # Printing the formula and the coefficients 
+                          # making it look like printing the lm-function
+                          cat('Call:','\nlinreg(formula:',deparse(formula), ', data =',df_name,'\b)','\n\n')
+                          
+                          cat('Coefficients:\n')
                           tab <- data.frame(t(.self$beta_hat))
                           colnames(tab) <- rownames(.self$beta_hat)
-                          print(tab, row.names = FALSE)
+                          rownames(tab) <- rep('', nrow(tab))
+                          base::print(tab)
                           
                           },
                         resid = function() {
-                          as.vector(.self$e)
+                          as.vector(.self$e) # the residuals as a vector
                         },
                         pred = function() {
-                          as.vector(.self$y_hat)},
-                        coeff = function() {
+                          as.vector(.self$y_hat)}, # the predicted y´s as a vector
+                        coef = function() {
+                          # the coefficients as a named vector
                           vec <- as.vector(.self$beta_hat)
-                          names(vec) <- rownames(.self$beta_hat)
+                          names(vec) <- rownames(.self$beta_hat) # giving it the names
                           vec},
                         summary = function() {
-                          
-                          p_print <- ifelse(.self$p_values < 2e-16, '<2e-16',round(.self$p_values,4))
-                          sum_tab <- data.frame('Estimate'=.self$beta_hat, 'Std.Error'=round(sqrt(diag(.self$VAR_B)),4),
-                                            't value' = round(.self$t_b,4), 'Pr(>|t|)' = .self$p_print, check.names = FALSE)
-                          print(sum_tab)
-                          cat('Residual standard error: ',round(sqrt(.self$sigma_2),4) ,'on ',df,' degrees of freedom' )
+                          # The summary table which looks like the lm summary()
+                          smallval <- ifelse(p_values < 2e-16, '<2e-16',round(p_values,4))
+                          sum_tab <- data.frame('Estimate'=beta_hat, 'Std.Error'=round(sqrt(diag(VAR_B)),4),
+                                            't value' = round(t_b,4), 'Pr(>|t|)' = smallval, check.names = FALSE)
+                          cat('Coefficients:\n')
+                          base::print(sum_tab)
+                          cat('\nResidual standard error: ',round(sqrt(.self$sigma_2),4) ,'on ',df,' degrees of freedom' )
                           
                           }
                       )
-                      
-                      
-                      
-                      
 )
-ye <- linreg$new(formula =Petal.Length ~ Species, data = iris)
-
-formula = Petal.Length ~ Species
-
-summary(lm(formula = Petal.Length ~ Species, data = iris))
-
-ye
-
 
