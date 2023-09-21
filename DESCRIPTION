@@ -19,3 +19,4 @@ Imports:
 	ggplot2
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
+License: MIT + file LICENSE
