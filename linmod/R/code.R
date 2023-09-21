@@ -1,3 +1,26 @@
+#' @title RC-class object to create linear model 
+#' 
+#' @name linreg
+#' 
+#' @description 
+#' An object of RC-class that is used to create a linear model from given formula.
+#' The formula should have variables that stems from a given dataset and formalized as 'Y ~ X'.
+#' The created model can then be used to access varying functions for analyzing.
+#' Functions available are: print, plot, resid, pred, coef, summary.
+#' 
+#' @param formula 
+#' A formula denoted as 'Y ~ X' that formalizes the relationship to be linearly calculated.
+#' The independent variables on the right side of the tilde sign can include multiple, separated by '+'.
+#'
+#' @param data A data frame that contains the variables which are to be modelled.
+#' 
+#' 
+#' @returns An RC-class object of the created linear model on which analyze can be made.
+#' 
+#' @export
+#' 
+#' @source <https://en.wikipedia.org/wiki/Ordinary_least_squares>
+
 linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame',
                                               Y = 'numeric',X = 'matrix',
                                               beta_hat='matrix', y_hat='array',
