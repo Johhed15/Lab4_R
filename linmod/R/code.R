@@ -19,6 +19,20 @@
 #' 
 #' @export
 #' 
+#' @field formula A formula for a linear regression
+#' @field data A data frame with variables for the formula
+#' @field Y A vector for the response variable
+#' @field X A matrix of the x variables
+#' @field beta_hat A matrix with the coefficients
+#' @field y_hat A vector with predicted values
+#' @field e A vector with residuals
+#' @field sigma_2 A matrix for the residual variance
+#' @field VAR_B A matrix with the varianve for the coefficients
+#' @field t_b A vector with t-values for each coefficient
+#' @field p_values A vector with p_values for each coefficient
+#' @field df_name A charachter vector with the name of the data frame
+#' 
+#' 
 #' @source \url{https://en.wikipedia.org/wiki/Ordinary_least_squares}
 
 linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame',
