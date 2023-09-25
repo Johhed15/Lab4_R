@@ -6,7 +6,7 @@
 \alias{linmod-package}
 \title{linmod: Create a linear model from a given formula}
 \description{
-This package is used to create a linear model by supplying the formula and dataset. The model is calculated using least squares and returns an object of class RC. Within the object you can call the following methods to analyze your model;
+This package is used to create a linear model by supplying the formula and dataset. The model is calculated using least squares and returns an object of class RC. Within the object you can call the following methods to analyze your model.
 }
 \seealso{
 Useful links:

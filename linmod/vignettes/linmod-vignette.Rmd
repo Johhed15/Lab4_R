@@ -20,8 +20,8 @@ knitr::opts_chunk$set(
  
 
 ```{r setup, include = FALSE}
-library(linmod)
-#devtools::load_all()
+#library(linmod)
+devtools::load_all()
 ```
 
  
