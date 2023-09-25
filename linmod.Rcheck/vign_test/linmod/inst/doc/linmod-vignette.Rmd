@@ -1,0 +1,233 @@
+---
+title: "linmod-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{linmod-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+ 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+ 
+
+```{r setup, include = FALSE}
+#library(linmod)
+devtools::load_all()
+```
+
+ 
+
+# Introduction
+
+ 
+
+This package is used to create a linear regression. It is based on calculations using Ordinary Least Squares matrix multiplications.
+
+ 
+
+* Supports both numeric and categorical variables contained in a dataframe
+* Can handle interactions
+
+ 
+
+Model is supplied as 'Y ~ X' where X can be multiple variables denoted by a '+' sign, i.e. 'Y ~ X1 + X2 + X3'.
+
+ 
+
+ 
+
+# How it works
+
+ 
+
+```{r}
+library(linmod)
+
+ 
+
+m <- linreg(Petal.Width ~ Species, data = iris)
+
+ 
+
+```
+
+ 
+
+When loading the library and supplying the model formula, an RC class object is created. This object is called linreg and holds information regarding the linear regression which has been calculated using OLS matrix multiplication. The object has different methods which can be called with it to provide information regarding the model.
+
+ 
+
+### Plot
+```{r, warning = FALSE, out.width= "70%", fig.align="center", fig.width = 6, fig.height = 4}
+m$plot()
+
+ 
+
+```
+
+ 
+
+The plot function above creates two graphs. First is the Fitted values vs Residuals and second is the Scale-Location plot that shows the Fitted values vs standardized, absolute residuals that are square-rooted. Outliers are visualized as their row number in the data frame. Both plot contains a horizontal red line which is a LOESS-curve (Local estimated scatterplot smoothing). In practice this line is a non-linear regression line that fits subsets of the data but is used here to analyze how much the residuals deviate from each other as well as check for differences in level between dependent and independent variables.
+
+ 
+
+### Print
+```{r}
+m$print()
+
+ 
+
+```
+
+ 
+
+Returns a simple print for the model, showing the model specification call as well as the coefficients for each variable in the dataframe.
+
+ 
+
+ 
+
+### Resid
+```{r}
+m$resid()
+
+ 
+
+```
+
+ 
+
+Returns a vector containing each residual element that the model produces.
+
+ 
+
+### Coef
+```{r}
+m$coef()
+
+ 
+
+```
+
+ 
+
+Returns the coefficients for the variables in the model.
+
+ 
+
+### Pred
+```{r}
+m$pred()
+
+ 
+
+```
+Returns a vector containing the predicted value for the dependent variable.
+
+ 
+
+### Summary
+```{r}
+m$summary()
+
+ 
+
+```
+
+ 
+
+Returns a comprehensive print of the model. The coefficients are shown with their point estimate as well as their standard error. t-value and p-value are also returned to showcase significance levels. The residual standard error for the model is also supplied as well as the degrees of freedom on which it is calculated.
+
+ 
+
+ 
+
+# How it works
+
+ 
+
+Model is calculated using Ordinary Least Squares matrix multiplication. The following calculations are made:
+
+ 
+
+$X$ = matrix of independent variables
+
+ 
+
+$y$ = vector of dependent variable
+
+ 
+
+Regression coefficients: 
+$$ \hat{\beta} = (X^TX)^{-1} X^Ty $$
+
+ 
+
+Fitted values:
+$$\hat{y} = X\hat{\beta}$$
+
+ 
+
+Residuals:
+$$\hat{e} = y - X\hat{\beta}$$
+
+ 
+
+Degrees of freedom:
+$$df = n-p$$
+
+ 
+
+ 
+
+Residual variance:
+$$\hat{\sigma}^2 = \frac{e^T e}{df}$$
+
+ 
+
+In the residual variance, $n$ denotes the number of observations and $p$ the number of parameters in the model.
+
+ 
+
+ 
+
+Regression coefficients variance:
+$$\hat{Var}(\hat{\beta}) = \hat{\sigma}^2(X^T X)^{-1}$$
+
+ 
+
+ 
+
+Coefficient t-values:
+$$t_\beta = \frac{\hat{\beta}}{\sqrt{Var(\hat{\beta})}}$$
+
+ 
+
+ 
+
+```{r}
+
+ 
+
+ 
+
+```
+
+ 
+
+ 
+
+# References
+
+ 
+
+https://en.wikipedia.org/wiki/Ordinary_least_squares

@@ -8,21 +8,26 @@ Authors@R: c(
 	person(given="Mikael",family="Montén",email = "mikmo937@student.liu.se",role = c("aut")))
 Description: This package is used to create a linear model by supplying the formula and dataset. The model is calculated using least squares and returns an object of class RC. Within the object you can call the following methods to analyze your model;
 print(): to print out coefficients and coefficient names
-plot(): plot residuals vs fitted and scale-location plots based on ggplot2 graphics
+plot(): plot residuals vs fitted and scale-location plots based on
+        ggplot2 graphics
 resid(): return the residuals as a vector
 pred(): return the predicted values of y
 coef(): return the model coefficients as a named vector
-summary(): return a cohesive printout involving coefficients with standard error, t-value, p-value, estimated standard deviation and df
+summary(): return a cohesive printout involving coefficients with
+        standard error, t-value, p-value, estimated standard deviation
+        and df
 Encoding: UTF-8
 URL: https://github.com/Johhed15/Lab4_R
-Imports:
-	ggplot2
+Imports: ggplot2
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
-Suggests: 
-    knitr,
-    rmarkdown,
-    testthat (>= 3.0.0)
+Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2023-09-25 10:51:11 UTC; johan
+Author: Johannes Hedström [aut, cre],
+  Mikael Montén [aut]
+Maintainer: Johannes Hedström <johed883@student.liu.se>
+Built: R 4.0.4; ; 2023-09-25 10:51:17 UTC; windows
