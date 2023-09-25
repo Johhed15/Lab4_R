@@ -22,4 +22,19 @@ The formula should have variables that stems from a given dataset and formalized
 The created model can then be used to access varying functions for analyzing.
 Functions available are: print, plot, resid, pred, coef, summary.
 }
+\section{Methods}{
+
+\describe{
+\item{\code{coef()}}{The coefficients as a named vector}
+
+\item{\code{plot()}}{creating a dataframe to create plots}
+
+\item{\code{pred()}}{Return the predicted Y values}
+
+\item{\code{print()}}{Printing the formula and the coefficients}
+
+\item{\code{resid()}}{Return the residuals as a vector}
+
+\item{\code{summary()}}{The summary table which looks like the lm summary()}
+}}
 

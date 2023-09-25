@@ -66,9 +66,11 @@ linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame
                           
                           # taking ot the name of the dataframe
                           .self$df_name <-  deparse(substitute(data))
+                          
                         },
                         plot = function() {
-                          # creating a dataframe to create plots
+                          "creating a dataframe to create plots"
+                          
                           res_fit_df <- data.frame(y_hat, e)
                           res_fit_df$std_res <- as.numeric(abs(scale(res_fit_df$e)))
                           
@@ -120,35 +122,49 @@ linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame
                             ggplot2::scale_y_continuous(limits = c(0, 1.8), breaks = c(0, 0.5, 1.0, 1.5))
                         },
                         print = function() {
-                          # Printing the formula and the coefficients 
+                           "Printing the formula and the coefficients" 
                           # making it look like printing the lm-function
-                          cat('Call:','\nlinreg(formula:',deparse(formula), ', data =',df_name,'\b)','\n\n')
-                          
+                          cat("Call:","\nlinreg(formula = ", format(formula),", data = ",
+                              format(.self$df_name),")\n\n", sep="")
+                        
                           cat('Coefficients:\n')
-                          tab <- data.frame(t(.self$beta_hat))
-                          colnames(tab) <- rownames(.self$beta_hat)
-                          rownames(tab) <- rep('', nrow(tab))
-                          base::print(tab)
+
+                          mat <- c(t(.self$beta_hat))
+                          names(mat) <- colnames(t(.self$beta_hat))
+                          base::print(round(mat,3))
                           
                           },
                         resid = function() {
+                          "Return the residuals as a vector"
                           as.vector(.self$e) # the residuals as a vector
                         },
                         pred = function() {
+                          "Return the predicted Y values"
                           as.vector(.self$y_hat)}, # the predicted y´s as a vector
                         coef = function() {
+                          "The coefficients as a named vector"
                           # the coefficients as a named vector
                           vec <- as.vector(.self$beta_hat)
                           names(vec) <- rownames(.self$beta_hat) # giving it the names
                           vec},
                         summary = function() {
-                          # The summary table which looks like the lm summary()
-                          smallval <- ifelse(p_values < 2e-16, '<2e-16',round(p_values,4))
-                          sum_tab <- data.frame('Estimate'=beta_hat, 'Std.Error'=round(sqrt(diag(VAR_B)),4),
-                                            't value' = round(t_b,4), 'Pr(>|t|)' = smallval, check.names = FALSE)
+                          "The summary table which looks like the lm summary()"
+                          smallval <- ifelse(.self$p_values < 2e-16, '<2e-16',round(.self$p_values,4))
+                          stars <- p_values
+                          stars[stars < 0.001] <- "***"
+                          stars[stars >= 0.001] <- "**"
+                          stars[stars >= 0.01] <- "*"
+                          stars[stars >= 0.05] <- "."
+                          stars[stars >= 0.1] <- " "
+                          
+                          
+                          sum_tab <- data.frame('Estimate'=round(.self$beta_hat,3), 'Std.Error'=round(sqrt(diag(.self$VAR_B)),3),
+                                            't value' = round(.self$t_b,3), 'Pr(>|t|)' = smallval," "=stars, check.names = FALSE)
                           cat('Coefficients:\n')
+                          
+                          
                           base::print(sum_tab)
-                          cat('\nResidual standard error: ',round(sqrt(.self$sigma_2),4) ,'on ',df,' degrees of freedom' )
+                          cat('\n','Residual standard error:',round(sqrt(.self$sigma_2),4) ,'on',df,'degrees of freedom' )
                           
                           }
                       )
