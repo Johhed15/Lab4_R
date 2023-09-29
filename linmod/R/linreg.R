@@ -20,7 +20,6 @@
 #' 
 #' @export linreg
 #' 
-#' @exportClass 
 #' 
 #' @field formula A linear regression-formula.
 #' @field data A data frame with variables for the model.
