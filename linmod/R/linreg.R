@@ -18,7 +18,9 @@
 #' @returns An RC-class object of the created linear model on which analyze can be made.
 #'
 #' 
-#' @export
+#' @export linreg
+#' 
+#' @exportClass linreg
 #' 
 #' @field formula A linear regression-formula.
 #' @field data A data frame with variables for the model.
