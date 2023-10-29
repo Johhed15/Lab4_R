@@ -209,25 +209,18 @@ $$\hat{Var}(\hat{\beta}) = \hat{\sigma}^2(X^T X)^{-1}$$
 
 Coefficient t-values:
 $$t_\beta = \frac{\hat{\beta}}{\sqrt{Var(\hat{\beta})}}$$
-
- 
-
- 
-
-```{r}
-
- 
-
- 
-
-```
-
- 
-
  
 
 # References
 
- 
 
 https://en.wikipedia.org/wiki/Ordinary_least_squares
+
+
+
+Ridgereg documentation
+
+```{r}
+ridgereg(residents ~ .-municipality-period,data = Train)
+
+```
