@@ -51,9 +51,14 @@ ridgereg <- setRefClass('ridgereg', fields = list(formula = 'formula',
                             
                             .self$data <- data
                             .self$formula <- formula
+                            if(all.vars(formula)[2]=="."){
+                            form1 <-formula[1]
+                            }else{
+                            form1 <-formula
+                            }
                             # checking the input
                             stopifnot(length(all.vars(formula)) >= 1,
-                                      is.data.frame(data),all.vars(formula) %in% colnames(data),
+                                      is.data.frame(data),all.vars(form1) %in% colnames(data),
                                       lambda>=0)
                             
                             # picking out my variables from the formula
@@ -118,15 +123,22 @@ ridgereg <- setRefClass('ridgereg', fields = list(formula = 'formula',
                           
                           pred = function(newdata=data){
                             "Return the predicted Y values of training data or new data"
-                            
+                            if(all.vars(formula)[2]=="."){
+                              form1 <-.self$formula[1]
+                            }else{
+                              form1 <-.self$formula
+                            }
                             # Checking the input
-                            stopifnot(all.vars(.self$formula)[-1] %in% colnames(newdata))
+                            stopifnot(all.vars(form1)[-1] %in% colnames(newdata))
                             
                             # creating a formula without y, as the new data probably don't have y
+                            if(all.vars(.self$formula)[1] %in% colnames(newdata)){
+                              form <-.self$formula
+                            }else{
                             form <- as.formula(stringr::str_flatten(.self$formula[-2]))
-                            
+                            }
                             x <- model.matrix(form, newdata)
-            
+                            
                             pred_Y <- x  %*%  .self$beta_hat # calculate the predictions
                             
                             base::print(as.vector(pred_Y))
