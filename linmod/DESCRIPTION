@@ -11,10 +11,8 @@ Description: This package is used to create a linear or a ridge model by supplyi
 summary(): return a cohesive printout involving coefficients with standard error, t-value, p-value, estimated standard deviation and df. The ridge regression model doesnt have all methods above, just coef, print and pred where you can add new data.
 Encoding: UTF-8
 URL: https://github.com/Johhed15/Lab4_R
-Remotes:
-github::wountoto/Lab5_AdvR/BaDaAn
 Imports:
-	ggplot2, devtools, stringr, MASS, dplyr, nycflights13, BaDaAn
+	ggplot2, devtools, stringr, MASS, dplyr, nycflights13
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
