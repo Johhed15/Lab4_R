@@ -15,10 +15,7 @@ Imports:
 	ggplot2, devtools, stringr, MASS, dplyr, nycflights13, BaDaAn
 	
 Remotes:
-  wountoto/Lab5_AdvR
-  
-RemoteSubdir:
-  BaDaAn
+  wountoto/Lab5_AdvR/BaDaAn
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
@@ -28,9 +25,3 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-RemoteType: github
-RemoteHost: api.github.com
-RemoteRepo: Lab5_AdvR
-RemoteUsername: wountoto
-RemoteRef: HEAD
-RemoteSha: 8bbf5b8933438cc0c280812834a976fa45aa24d3
