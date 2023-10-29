@@ -108,7 +108,9 @@ linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame
                             ggplot2::labs(y = "Residuals", x = paste0("Fitted values \n",deparse(formula)), title = "Residuals vs Fitted") +
                             ggplot2::geom_hline(yintercept = 0, color = "gray", linetype = "dotted") + 
                             # A red line which shows a loess curve
-                            ggplot2::stat_smooth(method = "loess", color = "red", se = FALSE, span = 1) +
+                            #ggplot2::stat_smooth(method = "loess", color = "red", se = FALSE, span = 1) +
+                            ggplot2::stat_summary(fun = "median", color = "red", geom = "line")  +
+                              
                             # Changing the theme and labs to make the graph visually better
                             ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(),
                                   panel.background = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
@@ -128,7 +130,8 @@ linreg <- setRefClass("linreg", fields = list(formula='formula',data='data.frame
                             # Using expression to make a title with square root sign
                             ggplot2::labs(y = expression(sqrt("|Standardized residuals|")), x = paste0("Fitted values \n",deparse(formula)), title = "Scale-Location") +
                             # A red line which shows a loess curve
-                            ggplot2::geom_smooth(method = "loess", color = "red", se = FALSE, span = 1) +
+                            #ggplot2::geom_smooth(method = "loess", color = "red", se = FALSE, span = 1) +
+                            ggplot2::stat_summary(fun = "mean", color = "red", geom = "line")  +
                             # Changing the theme and labs to make the graph visually better
                             ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(),
                                   panel.background = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"),
