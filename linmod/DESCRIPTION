@@ -28,3 +28,9 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+RemoteType: github
+RemoteHost: api.github.com
+RemoteRepo: Lab5_AdvR
+RemoteUsername: wountoto
+RemoteRef: HEAD
+RemoteSha: 8bbf5b8933438cc0c280812834a976fa45aa24d3
