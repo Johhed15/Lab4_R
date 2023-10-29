@@ -215,12 +215,3 @@ $$t_\beta = \frac{\hat{\beta}}{\sqrt{Var(\hat{\beta})}}$$
 
 
 https://en.wikipedia.org/wiki/Ordinary_least_squares
-
-
-
-Ridgereg documentation
-
-```{r}
-ridgereg(residents ~ .-municipality-period,data = Train)
-
-```
