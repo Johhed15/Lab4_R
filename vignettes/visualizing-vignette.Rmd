@@ -1,0 +1,29 @@
+---
+title: "visualizing-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{visualizing-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Handling large datasets with dplyr and visualizing
+
+This function handles data surrounding airports and their mean delay of flights for various airports around the US.
+
+```{r setup}
+library(linmod)
+```
+
+```{r, fig.height = 6, fig.width = 9}
+visualize_airport_delays()
+```
+
+The resulting graph is a scatter plot showing the true latitude and longitude values of the airports that there is data for. Therefore, you can easily see that the east coast has the most abundance of airports both north and south, and that the amount of airports in the US seem to decrease the further west you get.
