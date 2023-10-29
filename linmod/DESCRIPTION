@@ -15,7 +15,10 @@ Imports:
 	ggplot2, devtools, stringr, MASS, dplyr, nycflights13, BaDaAn
 	
 Remotes:
-  wountoto/Lab5_AdvR/tree/main/BaDaAn
+  wountoto/Lab5_AdvR
+  
+RemoteSubdir:
+  BaDaAn
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
