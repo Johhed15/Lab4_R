@@ -13,9 +13,6 @@ Encoding: UTF-8
 URL: https://github.com/Johhed15/Lab4_R
 Imports:
 	ggplot2, devtools, stringr, MASS, dplyr, nycflights13, BaDaAn
-	
-Remotes:
-  url::https://github.com/wountoto/Lab5_AdvR/tree/main/BaDaAn
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
