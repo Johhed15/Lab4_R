@@ -8,7 +8,7 @@ Authors@R: c(
 	person(given="Mikael",family="Montén",email = "mikmo937@student.liu.se",role = c("aut")),
 	person(given="Siddhesh",family="Sreedar",email="sidsr770@student.liu.se",role = c("aut")))
 Description: This package is used to create a linear or a ridge model by supplying the formula and dataset. The model is calculated using least squares and returns an object of class RC. Within the object you can call the following methods to analyze your model.
-summary(): return a cohesive printout involving coefficients with standard error, t-value, p-value, estimated standard deviation and df. The ridge regression model doesnt have all methods above, just coef, print and pred
+summary(): return a cohesive printout involving coefficients with standard error, t-value, p-value, estimated standard deviation and df. The ridge regression model doesnt have all methods above, just coef, print and pred where you can add new data.
 Encoding: UTF-8
 URL: https://github.com/Johhed15/Lab4_R
 Imports:
