@@ -55,6 +55,8 @@ model_lm <- lm(residents ~ .-municipality-period,data = Train)
 
 model_fwd <- caret::train( residents ~ .-municipality-period,data = Train,method = "leapForward",tuneGrid = expand.grid(nvmax = covariates))
 
+model_intercept <- lm(residents ~ 1,data = Train)
+
 
 ```
 
