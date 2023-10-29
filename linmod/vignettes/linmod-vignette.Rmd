@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = FALSE}
 #library(linmod)
+remotes::install_github("wountoto/Lab5_AdvR", subdir = "BaDaAn")
 devtools::load_all()
 ```
 
