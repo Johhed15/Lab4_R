@@ -5,13 +5,20 @@ Version: 1.0.0
 Date: 2023-09-21
 Authors@R: c(
 	person(given ="Johannes",family="Hedström",email = "johed883@student.liu.se",role = c("aut", "cre")),
-	person(given="Mikael",family="Montén",email = "mikmo937@student.liu.se",role = c("aut")))
-Description: This package is used to create a linear model by supplying the formula and dataset. The model is calculated using least squares and returns an object of class RC. Within the object you can call the following methods to analyze your model.
-summary(): return a cohesive printout involving coefficients with standard error, t-value, p-value, estimated standard deviation and df
+	person(given="Mikael",family="Montén",email = "mikmo937@student.liu.se",role = c("aut")),
+	person(given="Siddhesh",family="Sreedar",email="sidsr770@student.liu.se",role = c("aut")))
+Description: This package is used to create a linear or a ridge model by supplying the formula and dataset. The model is calculated using least squares and returns an object of class RC. Within the object you can call the following methods to analyze your model.
+summary(): return a cohesive printout involving coefficients with standard error, t-value, p-value, estimated standard deviation and df. The ridge regression model doesnt have all methods above, just coef, print and pred where you can add new data.
 Encoding: UTF-8
 URL: https://github.com/Johhed15/Lab4_R
 Imports:
-	ggplot2, devtools
+	ggplot2, devtools, stringr, MASS, dplyr, nycflights13, BaDaAn
+	
+Remotes:
+  wountoto/Lab5_AdvR
+  
+RemoteSubdir:
+  BaDaAn
 Depends: R (>= 3.5.0)
 RoxygenNote: 7.2.3
 License: MIT + file LICENSE
@@ -21,3 +28,9 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+RemoteType: github
+RemoteHost: api.github.com
+RemoteRepo: Lab5_AdvR
+RemoteUsername: wountoto
+RemoteRef: HEAD
+RemoteSha: 8bbf5b8933438cc0c280812834a976fa45aa24d3
